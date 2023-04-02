@@ -1,104 +1,53 @@
 import React, { useState } from "react";
+import InputFields from "../../UI/InputField/InputFields";
+import { InputFieldsProps } from "../../UI/InputField/type";
 import Card from "../../UI/Card/Card";
-import {
-  RenderInputFieldProp,
-  RenderInputFieldProps,
-  User,
-  InputTagProps,
-  InputTagsProps,
-} from "./types";
 
-import { mockData } from "./inputTagData";
+const AddUserTwo = () => {
+  const [formData, setFormData] = useState({});
 
-const InputField = (
-  { label, input }: RenderInputFieldProp,
-  setUserAction: React.Dispatch<React.SetStateAction<any | undefined>>
-) => {
+  const onSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    console.log(formData);
+  };
+
   const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    console.log('name, value : ', name, value );
-
-    setUserAction((prev: any) => {
+    setFormData((prev: any) => {
       return {
         ...prev,
         [name]: value,
       };
     });
   };
-  return (
-    <div>
-      <label htmlFor={`${label.htmlFor}`}>{label.text}</label>
-      <input
-        type={`${input.type}`}
-        id={`${input.id}`}
-        name = {`${input.id}`}
-        placeholder={`Please enter ${label.text}`}
-        onChange={onChangeHandler}
-      />
-    </div>
-  );
-};
 
-const InputFields = ({ props }: RenderInputFieldProps) => {
-  return (
-    <>
-      {props.map((prop) => (
-        <InputField
-          key={prop.input.id}
-          input={prop.input}
-          label={prop.label}
-          setStateAction={prop.setStateAction}
-        />
-      ))}
-    </>
-  );
-};
-
-const AddUser = (data: InputTagsProps) => {
-  const [formData, setFormData] = useState({});
-
-  const transformDataIntoInputFieldPropType: RenderInputFieldProps = {
+  const addUserData: InputFieldsProps = {
     props: [
       {
-        input: {
-          type: "text",
-          id: "userName",
-        },
-        label: {
-          text: "User Name",
-          htmlFor: "userName",
-        },
-        setStateAction: setFormData,
+        htmlFor: "userName",
+        label: "Name: ",
+        name: "userName",
+        type: "text",
+        onChange: onChangeHandler,
       },
       {
-        input: {
-          type: "text",
-          id: "userAge",
-        },
-        label: {
-          text: "User Age",
-          htmlFor: "userAge",
-        },
-        setStateAction: setFormData,
+        htmlFor: "userAge",
+        label: "Age: ",
+        name: "userAge",
+        type: "text",
+        onChange: onChangeHandler,
       },
     ],
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    console.log('formData: ', formData);
-
-    console.log("Submitted!");
-  };
-
   return (
-    <Card key={"AddUser"}>
-      <form onSubmit={handleSubmit}>
-        <InputFields props={transformDataIntoInputFieldPropType.props} />
+    <Card>
+      <form onSubmit={onSubmitHandler}>
+        <InputFields props={addUserData.props} />
         <button type="submit">Add User</button>
       </form>
     </Card>
   );
 };
 
-export default AddUser;
+export default AddUserTwo;
